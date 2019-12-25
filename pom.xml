@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.xyhs.tools</groupId>
-    <artifactId>code-generator</artifactId>
+    <artifactId>codeGenerator</artifactId>
     <version>1.0-SNAPSHOT</version>
 
 
