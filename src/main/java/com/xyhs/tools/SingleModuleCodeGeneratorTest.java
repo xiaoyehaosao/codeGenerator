@@ -14,53 +14,28 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
  **/
 public class SingleModuleCodeGeneratorTest {
 
-    /**
-     * 数据表
-     */
-    private  static String[] tables = new String[]{"delivery_address_info"};
 
-    /**
-     * 基类需要手动创建 -----也可以不初始化
-     */
-    private static final String baseEntity ="com.xyhs.b2c.domain.BaseEntity";
-
-    /**
-     * 路径中在src.main.java之后的包命
-     */
-    private static final String afterJavaPackageName ="com.xyhs.b2c";
-
-
-    public void codeGenerator()  {
-        String path2 =System.getProperty("user.dir");
-        System.out.println(path2);
-        // 代码生成器
-        AutoGenerator mpg  = initDataBase();
-        initDaoCode(mpg);
-        execute(mpg);
-    }
 
     /**
      * 初始化数据库
      * @return 代码生成器
      */
-    private static AutoGenerator initDataBase(){
+    private static AutoGenerator initDataBase(CodeGeneratorDTO generatorDTO){
         AutoGenerator mpg  = new AutoGenerator();
+
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir");
+        String projectPath = generatorDTO.getModulePath()+"/"+generatorDTO.getModuleName();
         gc.setOutputDir(projectPath + "/src/main/java");
-        gc.setAuthor("ljp");
-        gc.setOpen(false);
-        gc.setEnableCache(false);
-        gc.setSwagger2(true);
+        gc.setAuthor(generatorDTO.getFileAuth());
+        gc.setSwagger2(generatorDTO.getSwagger());
         mpg.setGlobalConfig(gc);
-
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://182.61.42.210:3306/basecenter?useUnicode=true&characterEncoding=UTF-8&useSSL=false");
-        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("Ljp10061087@");
+        dsc.setUrl(generatorDTO.getDataBaseUrl());
+        dsc.setDriverName(generatorDTO.getDriverName());
+        dsc.setUsername(generatorDTO.getUserName());
+        dsc.setPassword(generatorDTO.getPassWord());
         mpg.setDataSource(dsc);
         return mpg;
     }
@@ -69,30 +44,25 @@ public class SingleModuleCodeGeneratorTest {
      * Dao层代码生成
      * @param mpg 代码生成器
      */
-    private static void initDaoCode(AutoGenerator mpg){
+    private static void initDaoCode(AutoGenerator mpg,CodeGeneratorDTO generatorDTO){
         // 包配置
         PackageConfig pc = new PackageConfig();
-        //  pc.setModuleName("dao");
-        pc.setParent(afterJavaPackageName);
-        pc.setMapper("dao");
-        pc.setEntity("domain");
-        pc.setXml("xml");
+        pc.setParent(generatorDTO.getParent());
         mpg.setPackageInfo(pc);
     }
 
 
-    private static void execute(AutoGenerator mpg){
+    private static void execute(AutoGenerator mpg,CodeGeneratorDTO generatorDTO){
 
         // 自定义配置
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setSuperEntityClass(baseEntity);
+        strategy.setSuperEntityClass(generatorDTO.getBaseDomain());
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         // 写于父类中的公共字段
-        String[] array = tables;
-        strategy.setInclude(array);
+        strategy.setInclude(generatorDTO.getTables());
         strategy.setControllerMappingHyphenStyle(true);
         mpg.setStrategy(strategy);
         mpg.execute();
@@ -100,6 +70,23 @@ public class SingleModuleCodeGeneratorTest {
 
 
     public static void main(String[] args) {
+
+       String[] tables = new String[]{"delivery_address_info"};
+
+        CodeGeneratorDTO generatorDTO = new CodeGeneratorDTO();
+        generatorDTO.setDataBaseUrl("jdbc:mysql://182.61.42.210:3306/basecenter?useUnicode=true&characterEncoding=UTF-8&useSSL=false");
+        generatorDTO.setDriverName("com.mysql.cj.jdbc.Driver");
+        generatorDTO.setUserName("root");
+        generatorDTO.setPassWord("Ljp10061087@");
+        generatorDTO.setParent("com.xyhs.tools");
+        generatorDTO.setModuleName("codeGenerator");
+        generatorDTO.setModulePath("F:/xyhs");
+        generatorDTO.setTables(tables);
+        generatorDTO.setBaseDomain("com.xyhs.b2c.tools.BaseEntity");
+
+        AutoGenerator mpg  = initDataBase(generatorDTO);
+        initDaoCode(mpg,generatorDTO);
+        execute(mpg,generatorDTO);
 
     }
 }
