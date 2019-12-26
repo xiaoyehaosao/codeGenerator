@@ -153,12 +153,11 @@ public class MultipleModuleCodeGeneratorTest {
      * @param templatePath 模板路径
      * @param filePath 输出文件路径
      * @param pc 包配置
-     * @return 配置队列
      */
-    private static List<FileOutConfig> addFocList(List<FileOutConfig> focList, String templatePath, String filePath, PackageConfig pc ){
+    private static void addFocList(List<FileOutConfig> focList, String templatePath, String filePath, PackageConfig pc ){
 
         if(StringUtils.isEmpty(templatePath)){
-            return new ArrayList<>();
+            return;
         }
         String suffixPath;
         String upFileSuffix = "";
@@ -173,7 +172,7 @@ public class MultipleModuleCodeGeneratorTest {
             suffixPath = suffixPath + parent;
             TemplateEnum templateEnum = TemplateEnum.getEnumByValue(templatePath);
             if(templateEnum == null){
-                return null;
+                return;
             }
             String path =  getSuffix(templateEnum,false,pc);
             suffixPath =suffixPath + "/"+path;
@@ -197,7 +196,6 @@ public class MultipleModuleCodeGeneratorTest {
                 return  filePath + finalSuffixPath+ "/" + tableInfo.getEntityName() + finalUpFileSuffix + finalFileType;
             }
         });
-        return focList;
     }
 
 
