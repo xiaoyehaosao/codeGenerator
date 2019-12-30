@@ -78,6 +78,11 @@ public class CodeGeneratorDTO  implements Serializable {
     private String controllerModulePath;
 
     /**
+     * api - module的绝对路径
+     */
+    private String exportModulePath;
+
+    /**
      * 共用的包名 如： com.xyhs.b2c
      */
     private String parent;
@@ -123,7 +128,7 @@ public class CodeGeneratorDTO  implements Serializable {
 
     public String getServiceModulePath() {
         if(StringUtils.isEmpty(serviceModulePath)){
-            return modulePath+"/"+moduleName+"/"+ moduleName +"-export";
+            return modulePath+"/"+moduleName+"/"+ moduleName +"-service";
         }
         return serviceModulePath;
     }
@@ -140,6 +145,13 @@ public class CodeGeneratorDTO  implements Serializable {
             return modulePath+"/"+moduleName+"/"+ moduleName +"-web";
         }
         return controllerModulePath;
+    }
+
+    public String getExportModulePath() {
+        if(StringUtils.isEmpty(exportModulePath)){
+            return modulePath+"/"+moduleName+"/"+ moduleName +"-export";
+        }
+        return exportModulePath;
     }
 
     public String getDomain() {

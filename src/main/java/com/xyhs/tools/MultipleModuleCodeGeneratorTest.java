@@ -144,6 +144,7 @@ public class MultipleModuleCodeGeneratorTest {
         PackageConfig pc = new PackageConfig();
         pc.setParent(generatorDTO.getParent());
         pc.setEntity(generatorDTO.getDomain());
+        pc.setModuleName(generatorDTO.getModuleName());
         return pc;
     }
 
@@ -189,11 +190,14 @@ public class MultipleModuleCodeGeneratorTest {
         focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                if(templatePath.contains("service.java.vm")){
-                    tableInfo.setServiceName( tableInfo.getEntityName()+finalUpFileSuffix);
-                }
+                String fileName = "";
+               if(templatePath.contains("service.java.vm")){
+                   fileName = "I"+tableInfo.getEntityName();
+                }else{
+                   fileName = tableInfo.getEntityName();
+               }
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return  filePath + finalSuffixPath+ "/" + tableInfo.getEntityName() + finalUpFileSuffix + finalFileType;
+                return  filePath + finalSuffixPath+ "/" + fileName + finalUpFileSuffix + finalFileType;
             }
         });
     }
@@ -218,7 +222,7 @@ public class MultipleModuleCodeGeneratorTest {
         List<FileOutConfig> focList = new ArrayList<>();
         addFocList(focList,xmlTemplatePath,generatorDTO.getDaoModulePath(),pc);
         addFocList(focList,mapperTemplatePath,generatorDTO.getDaoModulePath(),pc);
-        addFocList(focList,entityTemplatePath,generatorDTO.getServiceModulePath(),pc);
+        addFocList(focList,entityTemplatePath,generatorDTO.getExportModulePath(),pc);
 
         addFocList(focList,serviceTemplatePath, generatorDTO.getServiceModulePath(),pc);
         addFocList(focList,serviceImplTemplatePath,generatorDTO.getServiceImplModulePath(),pc);
