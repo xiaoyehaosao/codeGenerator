@@ -265,7 +265,7 @@ public class MultipleModuleCodeGeneratorTest {
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
         // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("id");
+      //  strategy.setSuperEntityColumns("id");
         strategy.setInclude(tables);
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(pc.getModuleName() + "_");
